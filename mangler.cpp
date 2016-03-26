@@ -13,12 +13,22 @@ constexpr unsigned length(const char *str) {
   return len;
 }
 
+// Helpers to check predicate over all types in a parameter pack
+template <typename... Conds> struct and_ : std::true_type {};
+
+template <typename Cond, typename... Conds>
+struct and_<Cond, Conds...>
+    : std::conditional<Cond::value, and_<Conds...>, std::false_type>::type {};
+
 template <size_t N, typename traits = std::char_traits<char>>
 struct string_literal {
 
   template <typename... chars>
   constexpr string_literal(chars... cs)
-      : data_{cs...} {}
+      : data_{cs...} {
+    static_assert(and_<std::is_same<char, chars>...>::value,
+                  "All types must be of type char");
+  }
 
   constexpr std::size_t size() const { return N; }
 
