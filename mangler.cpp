@@ -27,6 +27,21 @@ struct string_literal {
     return data_[idx];
   }
 
+  template <size_t U>
+  constexpr auto operator+(const string_literal<U> &other) const {
+    string_literal<N + U> out;
+
+    for (unsigned i = 0; i < N; ++i) {
+      out.data_[i] = data_[i];
+    }
+    for (unsigned i = 0; i < U; ++i) {
+      out.data_[i + N] = other.data_[i];
+    }
+    out.data_[N + U] = '\0';
+
+    return out;
+  }
+
   constexpr const char *c_str() const { return data_; }
 
   char data_[N + 1];
@@ -60,6 +75,14 @@ int main() {
   static_assert(foo[12] == '\0', "Operator [] failed!");
 
   printf("%s\n", foo.c_str());
+
+  constexpr auto hello = "hello"_S;
+  constexpr auto world = " world!"_S;
+
+  constexpr auto hello_world = hello + world;
+
+  static_assert(hello_world[0] == 'h', "Operator + failed!");
+  static_assert(hello_world[12] == '\0', "Operator + failed!");
 
   return 0;
 }
