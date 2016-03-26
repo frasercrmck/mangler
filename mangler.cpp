@@ -116,6 +116,8 @@ int main() {
   constexpr auto hello = "hello"_S;
   constexpr auto world = " world!"_S;
 
+  printf("%s%s\n", hello.c_str(), world.c_str());
+
   constexpr auto hello_world = hello + world;
 
   static_assert(hello_world[0] == 'h', "Operator + failed!");
@@ -126,6 +128,8 @@ int main() {
 
   static_assert(hello_world != hello, "Operator != failed!");
   static_assert(hello_world != "hello world!!!", "Operator != failed!");
+
+  printf("%s\n", hello_world.c_str());
 
   return 0;
 }
