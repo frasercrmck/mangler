@@ -25,7 +25,7 @@ struct string_literal {
 
   template <typename... chars>
   constexpr string_literal(chars... cs)
-      : data_{cs...} {
+      : data{cs...} {
     static_assert(and_<std::is_same<char, chars>...>::value,
                   "All types must be of type char");
   }
@@ -34,7 +34,7 @@ struct string_literal {
 
   constexpr char operator[](std::size_t idx) const {
     // TODO: statically check bounds?
-    return data_[idx];
+    return data[idx];
   }
 
   template <size_t U>
@@ -42,12 +42,12 @@ struct string_literal {
     string_literal<N + U> out;
 
     for (unsigned i = 0; i < N; ++i) {
-      out.data_[i] = data_[i];
+      out.data[i] = data[i];
     }
     for (unsigned i = 0; i < U; ++i) {
-      out.data_[i + N] = other.data_[i];
+      out.data[i + N] = other.data[i];
     }
-    out.data_[N + U] = '\0';
+    out.data[N + U] = '\0';
 
     return out;
   }
@@ -58,7 +58,7 @@ struct string_literal {
     }
 
     for (unsigned i = 0; i <= N; ++i) {
-      if (data_[i] != other[i]) {
+      if (data[i] != other[i]) {
         return false;
       }
     }
@@ -79,9 +79,9 @@ struct string_literal {
     return !this->operator==(other.c_str());
   }
 
-  constexpr const char *c_str() const { return data_; }
+  constexpr const char *c_str() const { return data; }
 
-  char data_[N + 1];
+  char data[N + 1];
 };
 
 template <typename charT, charT... chars>
