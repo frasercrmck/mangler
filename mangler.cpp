@@ -43,6 +43,8 @@ using mangler::operator"" _S;
 int main() {
   constexpr auto foo = "hello world!"_S;
 
+  static_assert(foo.size() == 12, "size() failed!");
+
   static_assert(foo[0] == 'h', "Operator [] failed!");
   static_assert(foo[1] == 'e', "Operator [] failed!");
   static_assert(foo[2] == 'l', "Operator [] failed!");
