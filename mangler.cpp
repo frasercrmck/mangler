@@ -42,6 +42,24 @@ struct string_literal {
     return out;
   }
 
+  constexpr bool operator==(const char *other) const {
+    if (N != length(other)) {
+      return false;
+    }
+
+    for (unsigned i = 0; i <= N; ++i) {
+      if (data_[i] != other[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  template <size_t U>
+  constexpr bool operator==(const string_literal<U> &other) const {
+    return *this == other.c_str();
+  }
+
   constexpr const char *c_str() const { return data_; }
 
   char data_[N + 1];
@@ -83,6 +101,9 @@ int main() {
 
   static_assert(hello_world[0] == 'h', "Operator + failed!");
   static_assert(hello_world[12] == '\0', "Operator + failed!");
+
+  static_assert(hello_world == foo, "Operator == failed!");
+  static_assert(hello_world == "hello world!", "Operator == failed!");
 
   return 0;
 }
