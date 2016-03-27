@@ -24,8 +24,7 @@ template <size_t N, typename traits = std::char_traits<char>>
 struct string_literal {
 
   template <typename... chars>
-  explicit constexpr string_literal(chars... cs)
-      : data{cs...} {
+  explicit constexpr string_literal(chars... cs) : data{cs...} {
     static_assert(and_<std::is_same<char, chars>...>::value,
                   "All types must be of type char");
   }
